@@ -1,0 +1,401 @@
+body {
+    padding-top: 125px;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* TÍTULOS */
+#titulo {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+#rodada {
+    text-align: center;
+}
+
+h1 {
+    color: white;
+}
+
+/* ÁREA DA BATALHA */
+.batalha {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+/* VS */
+.batalha>h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+/* OPÇÕES */
+.opcao1,
+.opcao2 {
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+/* EFEITO HOVER */
+.opcao1:hover,
+.opcao2:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+/* IMAGENS */
+.batalha img {
+    width: 30vw;
+    max-width: 420px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+/* NOME DO ITEM */
+.batalha h2 {
+    margin-top: 12px;
+    font-size: 1.2rem;
+}
+
+iframe {
+    min-width: 400px;
+    min-height: 225px;
+}
+
+/* CAMPEÃO */
+.campeao {
+    text-align: center;
+}
+
+.campeao img {
+    width: 300px;
+    border-radius: 16px;
+    margin-top: 20px;
+}
+
+/* Container dos botões finais */
+main>div:last-of-type {
+    margin-bottom: 40px;
+}
+
+/* Botões Refazer e Voltar */
+main>div:last-of-type button {
+    padding: 12px 26px;
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    color: #fff;
+    background: linear-gradient(135deg, #8a2be2, #5a189a);
+
+    border: 2px solid #8a2be2;
+    border-radius: 12px;
+
+    cursor: pointer;
+    transition: all 0.25s ease;
+
+    box-shadow: 0 10px 25px rgba(138, 43, 226, 0.6);
+}
+
+/* Hover */
+main>div:last-of-type button:hover {
+    background: linear-gradient(135deg, #ae00c5, #750085);
+    color: #111;
+
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px #3d0046;
+}
+
+/* Clique */
+main>div:last-of-type button:active {
+    transform: scale(0.96);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* Remove estilo padrão do link */
+main>div:last-of-type a {
+    text-decoration: none;
+}
+
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+    .batalha {
+        flex-direction: column;
+    }
+
+    .batalha>h1 {
+        margin: 20px 0;
+    }
+
+    .batalha img {
+        width: 80vw;
+    }
+}
+
+
+/* ===============================
+   CAMPEÃO
+=============================== */
+#campeao {
+    text-align: center;
+    margin-top: 40px;
+    padding: 30px 20px;
+    width: 60%;
+    margin-left: 20%;
+
+    background: radial-gradient(circle at top, #2a2a2a, #111);
+    border: 2px solid rgb(77, 0, 0);
+    border-radius: 20px;
+
+    box-shadow: 0 0 25px rgb(150, 0, 0);
+    animation: surgirCampeao 0.6s ease;
+}
+
+/* TÍTULO CAMPEÃO */
+#campeao h1 {
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    color: #f5c542;
+    text-shadow: 0 0 12px rgba(245, 197, 66, 0.7);
+}
+
+/* NOME DO CAMPEÃO */
+#campeao h2 {
+    margin-top: 15px;
+    font-size: 1.4rem;
+    color: #fff;
+}
+
+/* IMAGEM DO CAMPEÃO */
+#campeao img {
+    width: 320px;
+    max-width: 85vw;
+    border-radius: 18px;
+
+    border: 3px solid #f5c542;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+
+    transition: transform 0.3s ease;
+}
+
+#campeao img:hover {
+    transform: scale(1.05);
+}
+
+/* VÍDEO DO CAMPEÃO */
+#campeao iframe {
+    width: 560px;
+    max-width: 90vw;
+    height: 315px;
+
+    border-radius: 18px;
+    border: 3px solid #f5c542;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+/* ANIMAÇÃO */
+@keyframes surgirCampeao {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+    #campeao h1 {
+        font-size: 1.8rem;
+    }
+
+    #campeao img {
+        width: 260px;
+    }
+
+    #campeao iframe {
+        height: 200px;
+    }
+}
+
+
+button:disabled {
+    pointer-events: none;
+    opacity: 0.6;
+    filter: grayscale(0.4);
+    cursor: not-allowed;
+}
+
+#btn1 {
+    border: 3px solid #007bff;
+}
+
+#btn2 {
+    border: 3px solid #ff2b2b;
+}
+
+#btn1,
+#btn2 {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* hover azul */
+#btn1:hover {
+    transform: scale(1.07);
+    box-shadow: 0 0 25px #00aaff;
+}
+
+/* hover vermelho */
+#btn2:hover {
+    transform: scale(1.07);
+    box-shadow: 0 0 25px #ff0000;
+}
+
+@keyframes cairEsquerda {
+    0% {
+        transform: rotate(0deg) translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(-25deg) translateY(300px);
+        opacity: 0;
+    }
+}
+
+@keyframes cairDireita {
+    0% {
+        transform: rotate(0deg) translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(25deg) translateY(300px);
+        opacity: 0;
+    }
+}
+
+.cair-esquerda {
+    animation: cairEsquerda 0.5s forwards;
+}
+
+.cair-direita {
+    animation: cairDireita 0.5s forwards;
+}
+
+#bracket-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    background: #0a0a23;
+    padding: 40px;
+    overflow-x: auto;
+}
+
+.lado {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.round {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.match {
+    background: #1a1a1a;
+    padding: 10px;
+    border-radius: 10px;
+    min-width: 180px;
+    position: relative;
+}
+
+.player {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px;
+    color: white;
+}
+
+.player img {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+.winner {
+    border-left: 4px solid gold;
+}
+
+/* FINAL */
+#final {
+    text-align: center;
+    color: white;
+}
+
+#final-match {
+    background: #222;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* LINHAS */
+.match::after {
+    content: "";
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    width: 40px;
+    height: 2px;
+    background: #00eaff;
+}
+
+.caindo-esquerda {
+    animation: cairEsquerda 0.6s ease forwards;
+}
+
+.caindo-direita {
+    animation: cairDireita 0.6s ease forwards;
+}
+
+@keyframes cairEsquerda {
+    0% {
+        transform: rotate(0deg) translateX(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(-90deg) translateX(-300px) translateY(200px);
+        opacity: 0;
+    }
+}
+
+@keyframes cairDireita {
+    0% {
+        transform: rotate(0deg) translateX(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(90deg) translateX(300px) translateY(200px);
+        opacity: 0;
+    }
+}

@@ -1,0 +1,393 @@
+:root {
+    --destaque: orange;
+    --destaque-hover: #ffae00;
+
+    --preto: #0f0f0f;
+    --preto-secundario: #1a1a1a;
+    --cinza-borda: #2a2a2a;
+    --cinza-texto: #cccccc;
+    --branco: #ffffff;
+}
+
+
+
+/* ===========================
+   Base
+=========================== */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    background-color: var(--preto);
+    color: var(--branco);
+}
+
+/* ===========================
+   Conteúdo
+=========================== */
+
+.conteudo {
+    max-width: 600px;
+    margin: 40px auto;
+    margin-top: 90px;
+    padding: 0 20px;
+}
+
+/* ===========================
+   Quiz Box
+=========================== */
+
+.quiz {
+    background: var(--preto-secundario);
+    border: 1px solid var(--cinza-borda);
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+}
+
+.quiz_img {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* ===========================
+   Textos
+=========================== */
+
+.quiz h1 {
+    margin-top: 18px;
+    font-size: 28px;
+    color: var(--destaque);
+}
+
+.quiz p {
+    margin-top: 10px;
+    font-size: 15px;
+    color: var(--cinza-texto);
+}
+
+/* ===========================
+   Container Quiz
+=========================== */
+
+#quiz-container {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* Pergunta */
+#quiz-container h2 {
+    grid-column: span 2;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* ===========================
+   Botões Quiz
+=========================== */
+
+#quiz-container button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    padding: 16px 20px 16px 64px;
+
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+
+    border: 1px solid #2a2a2a;
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+
+    cursor: pointer;
+    color: white;
+
+    transition: all 0.25s ease;
+    overflow: hidden;
+}
+
+/* Glow */
+#quiz-container button:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 0 18px rgba(255, 165, 0, 0.6);
+}
+
+/* Brilho */
+#quiz-container button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.25),
+        transparent
+    );
+    transition: 0.6s;
+}
+
+#quiz-container button:hover::after {
+    left: 100%;
+}
+
+#quiz-container button:active {
+    transform: scale(0.97);
+}
+
+/* ===========================
+   PlayStation Icons
+=========================== */
+
+#quiz-container button::before {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.ps-blue::before {
+    content: "○";
+    font-size: 36px;
+    color: #3b82f6;
+}
+
+.ps-pink::before {
+    content: "□";
+    font-size: 30px;
+    color: hotpink;
+}
+
+.ps-red::before {
+    content: "✕";
+    font-size: 20px;
+    color: red;
+}
+
+.ps-green::before {
+    content: "△";
+    font-size: 28px;
+    color: limegreen;
+}
+
+/* ===========================
+   Feedback Respostas
+=========================== */
+
+#quiz-container button.correta {
+    background: linear-gradient(145deg, #16a34a, #15803d);
+    border-color: #22c55e;
+    box-shadow: 0 0 25px rgba(34, 197, 94, 0.9);
+}
+
+#quiz-container button.errada {
+    background: linear-gradient(145deg, #dc2626, #7f1d1d);
+    border-color: #ef4444;
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.9);
+    animation: erroShake 0.35s ease;
+}
+
+@keyframes erroShake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-3px); }
+    100% { transform: translateX(0); }
+}
+
+/* ===========================
+   Animação Pergunta
+=========================== */
+
+.quiz-animar {
+    animation: trocarPergunta 0.35s ease;
+}
+
+@keyframes trocarPergunta {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ===========================
+   Ranking
+=========================== */
+
+#ranking {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#ranking h3 {
+    color: var(--destaque);
+}
+
+/* ===========================
+   TELA DE VITÓRIA 😈🔥
+=========================== */
+
+.vitoria {
+    animation: telaVitoria 0.6s ease;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    grid-column: span 2;
+}
+
+@keyframes telaVitoria {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.vitoria h2 {
+    font-size: 26px;
+    color: orange;
+    text-shadow: 0 0 18px rgba(255, 165, 0, 0.9);
+    animation: glowVitoria 1.2s infinite alternate;
+}
+
+@keyframes glowVitoria {
+    from { text-shadow: 0 0 10px orange; }
+    to { text-shadow: 0 0 25px orange; }
+}
+
+/* ===========================
+   BOTÕES VITÓRIA (lado a lado)
+=========================== */
+
+.vitoria .botoes {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.vitoria .botoes button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    border: 1px solid var(--cinza-borda);
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.vitoria .botoes button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.5);
+}
+
+/* ===========================
+   Responsividade
+=========================== */
+
+@media (max-width: 600px) {
+
+    #quiz-container {
+        grid-template-columns: 1fr;
+    }
+
+    #quiz-container h2 {
+        grid-column: span 1;
+    }
+
+    #quiz-container button {
+        padding-left: 56px;
+    }
+
+    .vitoria .botoes {
+        flex-direction: column;
+    }
+}
+
+.barra {
+    width: 100%;
+    height: 8px;
+    background: #111;
+    border-radius: 6px;
+    margin-top: 15px;
+    overflow: hidden;
+}
+
+#barra-progresso {
+    height: 100%;
+    width: 0%;
+    background: orange;
+    transition: 0.3s;
+}
+
+#ranking p {
+    animation: subir 0.4s ease;
+}
+
+@keyframes subir {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notificacao {
+    position: fixed;      /* 🔥 ISSO FAZ VIRAR POPUP */
+    bottom: 20px;
+    right: 20px;
+
+    background: #111;
+    color: #fff;
+
+    padding: 15px 20px;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+
+    z-index: 9999;
+}
+
+.notificacao.mostrar {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notif-icon {
+    font-size: 20px;
+}
+
+.notificacao {
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}

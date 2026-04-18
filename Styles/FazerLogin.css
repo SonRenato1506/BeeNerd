@@ -1,0 +1,157 @@
+:root {
+    --branco: #ffffff;
+    --preto: #000000;
+    --cinza: #e5e5e5;
+}
+
+/* reset */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* layout */
+
+.container {
+
+    display: flex;
+    height: 100vh;
+    width: 100%;
+
+}
+
+/* fundo animado */
+
+.bg {
+
+    flex: 1;
+
+    /* background-image: url("../Imagens/fundo.png"); */
+    background-repeat: repeat-y;
+    background-size: cover;
+
+    animation: scrollFundo 30s linear infinite;
+    
+
+}
+
+@keyframes scrollFundo {
+
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 0 1000px;
+    }
+
+}
+
+/* login */
+
+#login {
+
+    width: 420px;
+    min-width: 420px;
+    height: 100vh;
+
+    background: white;
+
+    border-right: 1px solid var(--cinza);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 40px;
+
+}
+
+#login h1 {
+
+    font-size: 32px;
+    margin-bottom: 10px;
+
+}
+
+#login p {
+
+    margin-bottom: 20px;
+
+}
+
+form {
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+label {
+
+    margin-top: 10px;
+    font-weight: bold;
+
+}
+
+input {
+
+    height: 40px;
+    margin-top: 5px;
+    padding-left: 10px;
+
+}
+
+a {
+
+    margin-top: 10px;
+    font-size: 14px;
+
+}
+
+#btn-entrar {
+
+    margin-top: 20px;
+    height: 45px;
+
+    background: black;
+    color: white;
+
+    border: none;
+    border-radius: 20px;
+
+    cursor: pointer;
+
+}
+
+#btn-entrar:hover {
+
+    background: #444;
+
+}
+
+/* responsivo */
+
+@media (max-width: 700px) {
+
+    .container {
+        flex-direction: column;
+    }
+
+    #login {
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+    }
+
+    .bg {
+        height: 200px;
+    }
+
+}

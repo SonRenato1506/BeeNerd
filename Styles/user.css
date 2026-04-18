@@ -1,0 +1,255 @@
+:root {
+    --roxo1: #1a001f;      /* roxo quase preto */
+    --roxo2: #a020ff;      /* violeta neon puro */
+    --roxoGlow: #d580ff;   /* glow violeta intenso */
+
+    --bg: #050006;
+    --card: #0b0710;
+    --input: #140f1a;
+
+    --texto: #f1e9ff;
+
+    --danger: #cc0000;
+    --danger-hover: #ff0000;
+}
+
+/* =========================
+   BASE
+========================= */
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at top, #1b0f25, var(--bg));
+    padding-top: 100px;
+    color: var(--texto);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+}
+
+/* =========================
+   CARD PERFIL
+========================= */
+
+.perfil-box {
+    background: var(--card);
+    padding: 40px;
+    border-radius: 18px;
+    width: 420px;
+
+    border: 1px solid rgba(160, 32, 255, 0.35);
+
+    box-shadow:
+        0 0 90px rgba(160, 32, 255, 0.35),
+        inset 0 0 25px rgba(213, 128, 255, 0.05);
+
+    text-align: center;
+    animation: fadeIn 0.35s ease;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-weight: 800;
+    color: var(--roxo2);
+
+    text-shadow:
+        0 0 22px rgba(213, 128, 255, 1);
+}
+
+/* =========================
+   FOTO
+========================= */
+
+.foto-perfil {
+    margin: 20px 0;
+}
+
+.foto-perfil img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    border: 3px solid var(--roxo2);
+
+    box-shadow:
+        0 0 55px rgba(160, 32, 255, 0.95);
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+label {
+    display: block;
+    text-align: left;
+    margin-top: 15px;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.05);
+
+    background: var(--input);
+    color: white;
+
+    outline: none;
+    transition: 0.2s;
+}
+
+input:focus {
+    border-color: var(--roxo2);
+
+    box-shadow:
+        0 0 22px rgba(160, 32, 255, 0.8);
+}
+
+/* =========================
+   BOTÕES
+========================= */
+
+.btn {
+    width: 100%;
+    padding: 14px;
+
+    border: none;
+    border-radius: 12px;
+
+    margin-top: 20px;
+
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.salvar {
+    background: linear-gradient(45deg, var(--roxo1), var(--roxo2));
+    color: white;
+
+    box-shadow:
+        0 0 28px rgba(160, 32, 255, 0.55);
+}
+
+.salvar:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 60px rgba(160, 32, 255, 1);
+}
+
+.actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.logout {
+    background: #191421;
+    color: white;
+}
+
+.logout:hover {
+    background: #241a30;
+}
+
+.delete {
+    background: var(--danger);
+    color: white;
+}
+
+.delete:hover {
+    background: var(--danger-hover);
+
+    box-shadow:
+        0 0 25px rgba(255, 0, 0, 0.85);
+}
+
+/* =========================
+   MENSAGEM
+========================= */
+
+.mensagem {
+    background: rgba(160, 32, 255, 0.10);
+
+    padding: 10px;
+    border-radius: 10px;
+
+    margin-bottom: 10px;
+
+    border: 1px solid rgba(160, 32, 255, 0.5);
+
+    box-shadow:
+        0 0 25px rgba(160, 32, 255, 0.45);
+}
+
+/* =========================
+   ANIMAÇÃO
+========================= */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.nivel-box {
+    margin-top: 20px;
+    padding: 15px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    border: 1px solid #333;
+}
+
+.barra-xp {
+    width: 100%;
+    height: 10px;
+    background: #111;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.xp-fill {
+    height: 100%;
+    background: orange;
+    transition: 0.4s;
+}
+
+.conquistas-box {
+    margin-top: 25px;
+}
+
+.conquistas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.conquista {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.conquista .icone {
+    font-size: 24px;
+}
