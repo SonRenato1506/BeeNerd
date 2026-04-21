@@ -27,285 +27,250 @@ if (isset($_SESSION['id'])) {
 
 <style>
     /* ===================== */
-    /* 🎨 Variáveis Globais */
+    /* 🎨 NOVA PALETA */
     :root {
-        --vermelho1: #E60012;
-        --vermelho2: #B8000E;
-        --vermelho-hover: #FF1A1A;
-        --purple: #7a0099;
+        --bg: #0d0d0d;
+        --bg-soft: #151515;
+        --card: #1c1c1c;
 
-        --roxo: #531574;
+        --amarelo: #ffd000;
+        --amarelo-soft: #ffdf4d;
 
-        --texto-h2: #b429ff;
-        --texto-header: #ffffff;
+        --verde: #00ff88;
 
-        --preto: #0f0f0f;
-        --preto-escuro: #000000;
-
-        --cinza-escuro: #242525;
-        --cinza-medio: #4D524E;
-
-        --branco: #ffffff;
+        --texto: #eaeaea;
+        --texto-sec: #b5b5b5;
     }
 
-    /* ===================== */
-    /* 🌐 Reset */
+    /* RESET */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
 
-    /* ===================== */
-    /* 🧍 Body */
+    /* BODY */
     body {
-        background-color: var(--cinza-escuro);
-        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        font-family: 'Segoe UI', Arial, sans-serif;
+        color: var(--texto);
     }
 
     /* ===================== */
-    /* 📝 Header */
-    header h1,
-    header p,
-    header a {
-        color: var(--texto-header);
-        text-transform: uppercase;
-    }
-
-    header h2 {
-        color: var(--texto-h2);
-        text-transform: uppercase;
-    }
-
-    /* ===================== */
-    /* 📋 Navbar */
+    /* 🧭 NAVBAR */
     .navbar {
         display: flex;
         align-items: center;
-        /* centraliza na altura ✅ */
         justify-content: space-between;
-        background-color: var(--preto);
+
+        height: 80px;
         padding: 0 30px;
-        /* remove padding vertical */
+
         position: fixed;
         top: 0;
-        height: 80px;
         width: 100%;
-        z-index: 10;
-        gap: 20px;
-        box-shadow: 0 0 95px var(--preto-escuro);
-        border-bottom: 3px solid var(--preto-escuro);
-    }
 
-    .navbar.has-search {
-        grid-template-columns: auto 1fr auto auto;
-    }
+        background: rgba(13, 13, 13, 0.9);
+        backdrop-filter: blur(10px);
 
-    .navbar:not(.has-search) {
-        grid-template-columns: auto 1fr auto;
+        border-bottom: 1px solid rgba(255, 208, 0, 0.2);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+
+        z-index: 100;
     }
 
     /* ===================== */
-    /* 🔗 Menu */
+    /* 🔗 MENU */
     .navbar ul {
         display: flex;
-        justify-content: center;
+        gap: 15px;
         list-style: none;
-        gap: 10px;
     }
 
     .navbar ul a {
+        color: var(--texto-sec);
         text-decoration: none;
-        padding: 10px 18px;
+        padding: 8px 12px;
         font-size: 14px;
-        border-radius: 25px;
+        position: relative;
         transition: 0.3s;
     }
 
-    .navbar ul li a:hover,
-    .navbar ul li a.ativo {
-        background-color: var(--roxo);
-        border-radius: 30px;
+    /* LINHA ANIMADA */
+    .navbar ul a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        width: 0%;
+        height: 2px;
+        background: var(--amarelo);
+        transition: 0.3s;
+    }
+
+    .navbar ul a:hover::after,
+    .navbar ul a.ativo::after {
+        width: 100%;
+    }
+
+    .navbar ul a:hover,
+    .navbar ul a.ativo {
+        color: var(--amarelo);
     }
 
     /* ===================== */
-    /* 🔘 Botões */
+    /* 🔘 BOTÕES */
     .btn-navbar {
-        background-color: var(--vermelho1);
-        color: white;
-        border: none;
+        background: transparent;
+        border: 1px solid var(--amarelo);
+        color: var(--amarelo);
+
+        padding: 6px 14px;
         border-radius: 8px;
-        padding: 8px 14px;
+        font-size: 13px;
+
         cursor: pointer;
-        font-size: 12px;
-        text-decoration: none;
         transition: 0.3s;
     }
 
     .btn-navbar:hover {
-        background-color: var(--vermelho-hover);
+        background: var(--amarelo);
+        color: black;
     }
 
     /* ===================== */
-    /* 🔍 Busca */
+    /* 🔍 BUSCA */
     .search-container {
         display: flex;
         align-items: center;
-        background-color: var(--cinza-medio);
+
+        background: var(--bg-soft);
         border-radius: 10px;
+        border: 1px solid transparent;
+
         overflow: hidden;
         height: 38px;
+
+        transition: 0.3s;
+    }
+
+    .search-container input {
+        border: none;
+        background: transparent;
+        color: white;
+        padding: 8px;
+        outline: none;
+        width: 180px;
     }
 
     .btn-lupa {
         background: none;
         border: none;
+        color: var(--amarelo);
         padding: 6px 10px;
         cursor: pointer;
-        color: white;
-    }
-
-    .search-container input {
-        border: none;
-        padding: 6px 10px;
-        outline: none;
-        width: 180px;
-        background-color: var(--cinza-medio);
     }
 
     .search-container:focus-within {
-        box-shadow: 0 0 10px var(--roxo);
+        border: 1px solid var(--amarelo);
+        box-shadow: 0 0 10px rgba(255, 208, 0, 0.3);
     }
 
     /* ===================== */
-    /* 🧠 Logo */
-    /* .title {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 28px;
-        white-space: nowrap;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 32px;
-        font-weight: 800;
-        letter-spacing: 3px;
-        color: #000000;
-
-        text-shadow:
-            0 0 5px #a020f0,
-            0 0 10px #a020f0,
-            0 0 20px #7b2cbf,
-            0 0 40px #7b2cbf,
-            0 0 60px #5a189a;
-
-        transition: 0.3s ease-in-out;
-    } */
-
-    .title {
-        display: flex;
-        align-items: center;
-        /* garante alinhamento interno */
-    }
-
+    /* 🧠 LOGO */
     .title img {
-        position: absolute;
-        top: 13px;
-        left: -50px;
         height: 50px;
-        /* 🔥 logo maior */
-        width: auto;
-        background-color: transparent;
-        /* transform: scale(5.5); */
+        filter: drop-shadow(0 0 6px rgba(255, 208, 0, 0.4));
     }
-
-    .title img:hover {
-        
-        /* opcional, efeito suave */
-    }
-
 
     /* ===================== */
-    /* 👤 Usuário */
+    /* 👤 USER */
     .user-area,
     .auth-buttons {
         display: flex;
         align-items: center;
-        gap: 12px;
-        white-space: nowrap;
+        gap: 10px;
     }
 
     .user-photo {
         width: 38px;
         height: 38px;
         border-radius: 50%;
-        object-fit: cover;
-        cursor: pointer;
+        border: 2px solid transparent;
         transition: 0.3s;
     }
 
     .user-photo:hover {
-        transform: scale(1.1);
+        border: 2px solid var(--amarelo);
+        transform: scale(1.08);
     }
 
     /* ===================== */
-    /* 🍔 Hamburger */
+    /* 🍔 MENU MOBILE */
     .hamburger {
         display: none;
+        font-size: 26px;
+        color: var(--amarelo);
         background: none;
         border: none;
-        font-size: 26px;
-        color: white;
         cursor: pointer;
     }
 
     /* ===================== */
-    /* 📱 Side Menu */
+    /* 📱 SIDE MENU */
     .side-menu {
         position: fixed;
         top: 0;
         left: -260px;
-        width: 160px;
+
+        width: 220px;
         height: 100%;
-        background-color: var(--preto);
-        box-shadow: 5px 0 25px rgba(0, 0, 0, 0.6);
+
+        background: var(--bg);
+        padding: 25px;
+
         display: flex;
         flex-direction: column;
-        padding: 25px;
         gap: 18px;
+
         transition: 0.3s;
-        z-index: 20;
+        z-index: 200;
+
+        border-right: 1px solid rgba(255, 208, 0, 0.2);
     }
 
     .side-menu a {
-        color: white;
+        color: var(--texto-sec);
         text-decoration: none;
         padding: 10px;
         border-radius: 8px;
+        transition: 0.2s;
     }
 
     .side-menu a:hover {
-        background-color: var(--roxo);
+        background: rgba(255, 208, 0, 0.1);
+        color: var(--amarelo);
     }
 
     .close-menu {
         background: none;
         border: none;
-        color: white;
+        color: var(--amarelo);
         font-size: 22px;
         align-self: flex-end;
         cursor: pointer;
     }
 
     /* ===================== */
-    /* 🌫 Overlay */
+    /* 🌫 OVERLAY */
     .menu-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.6);
         opacity: 0;
         pointer-events: none;
         transition: 0.3s;
-        z-index: 15;
+        z-index: 150;
     }
 
     .side-menu.open {
@@ -318,74 +283,45 @@ if (isset($_SESSION['id'])) {
     }
 
     /* ===================== */
-    /* 📱 Responsivo */
-    @media (max-width: 1200px) {
-        .title {
-            display: none;
-        }
-}
-
+    /* 📱 RESPONSIVO */
     @media (max-width: 900px) {
 
         .navbar ul,
-        .auth-buttons,
-        .title {
+        .auth-buttons {
             display: none;
         }
 
         .hamburger {
             display: block;
         }
-
-        .navbar {
-            grid-template-columns: 1fr auto;
-        }
     }
 
-    
-/* ===============================
-   BOTÃO EDITAR NOTÍCIA
-================================ */
+    /* ===================== */
+    /* ✏️ BOTÃO EDITOR */
+    #editor {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
 
-#editor {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
+        background: var(--amarelo);
+        color: black;
 
-    background: var(--purple);
-    color: white;
+        border: none;
+        padding: 14px 20px;
+        border-radius: 10px;
 
-    border: none;
-    padding: 14px 22px;
-    border-radius: 12px;
+        font-weight: bold;
+        cursor: pointer;
 
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+        box-shadow: 0 0 15px rgba(255, 208, 0, 0.4);
+        transition: 0.2s;
+    }
 
-    cursor: pointer;
-
-    box-shadow: 0 8px 25px rgba(0,0,0,0.7);
-
-    transition: 
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
-}
-
-/* Hover */
-#editor:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(0,0,0,0.9);
-    background: #9300c0;
-}
-
-/* Clique */
-#editor:active {
-    transform: scale(0.95);
-}
+    #editor:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0 25px rgba(255, 208, 0, 0.6);
+    }
 </style>
-
 
 <script>
     function abrirMenu() {
@@ -416,13 +352,18 @@ if (isset($_SESSION['id'])) {
         </h2>
 
         <ul>
-            <li><a class="<?= $paginaAtual == 'Noticias.php' ? 'ativo' : '' ?>" href="../Home/Noticias.php">Notícias</a></li>
-            <li><a class="<?= $paginaAtual == 'Quizzes.php' ? 'ativo' : '' ?>" href="../Home/Quizzes.php">Quizzes</a></li>
-            <li><a class="<?= $paginaAtual == 'nerdlists.php' ? 'ativo' : '' ?>" href="../Home/nerdlists.php">NerdList</a></li>
-            <li><a class="<?= $paginaAtual == 'copinhas.php' ? 'ativo' : '' ?>" href="../Home/copinhas.php">Copinhas</a></li>
+            <li><a class="<?= $paginaAtual == 'Noticias.php' ? 'ativo' : '' ?>" href="../Home/Noticias.php">Notícias</a>
+            </li>
+            <li><a class="<?= $paginaAtual == 'Quizzes.php' ? 'ativo' : '' ?>" href="../Home/Quizzes.php">Quizzes</a>
+            </li>
+            <li><a class="<?= $paginaAtual == 'nerdlists.php' ? 'ativo' : '' ?>"
+                    href="../Home/nerdlists.php">NerdList</a></li>
+            <li><a class="<?= $paginaAtual == 'copinhas.php' ? 'ativo' : '' ?>" href="../Home/copinhas.php">Copinhas</a>
+            </li>
 
             <?php if (isset($_SESSION['id'])): ?>
-                <li><a class="<?= $paginaAtual == 'criador.php' ? 'ativo' : '' ?>" href="../CREATE/criador.php">Criador</a></li>
+                <li><a class="<?= $paginaAtual == 'criador.php' ? 'ativo' : '' ?>" href="../CREATE/criador.php">Criador</a>
+                </li>
             <?php endif; ?>
         </ul>
 

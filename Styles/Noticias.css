@@ -349,6 +349,10 @@ a {
     border-bottom: 2px solid orange;
 }
 
+#caixa.importante:hover {
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.3);
+}
+
 /* Mobile */
 @media (max-width: 600px) {
     #tipoQuiz {

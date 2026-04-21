@@ -32,23 +32,22 @@
 
 <style>
     /* =========================
-   📌 FOOTER BASE
+   📌 FOOTER MODERNO
 ========================= */
     .footer {
         position: relative;
-        background: #202020;
-        color: white;
+        background: #0d0d0d;
+        color: #eaeaea;
 
-        padding: 15px 20px;
+        padding: 25px 20px;
         text-align: center;
 
-        font-family: "Anonymous Pro", monospace;
-
-        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+        border-top: 1px solid rgba(255, 208, 0, 0.2);
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8);
     }
 
     /* =========================
-   ✨ LINHA DECORATIVA
+   ✨ LINHA NEON
 ========================= */
     .footer::before {
         content: "";
@@ -58,15 +57,17 @@
         left: 50%;
         transform: translateX(-50%);
 
-        width: 80%;
+        width: 70%;
         height: 2px;
 
         background: linear-gradient(90deg,
                 transparent,
-                var(--texto-header),
+                #ffd000,
+                #00ff88,
+                #ffd000,
                 transparent);
 
-        opacity: 0.4;
+        opacity: 0.6;
     }
 
     /* =========================
@@ -79,7 +80,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 12px;
+        gap: 14px;
     }
 
     /* =========================
@@ -87,8 +88,8 @@
 ========================= */
     .footer-text {
         font-size: 0.95rem;
+        color: #b5b5b5;
         line-height: 1.5;
-        opacity: 0.85;
     }
 
     /* =========================
@@ -96,7 +97,7 @@
 ========================= */
     .footer-links {
         display: flex;
-        gap: 18px;
+        gap: 16px;
     }
 
     /* =========================
@@ -109,14 +110,37 @@
         border-radius: 50%;
         padding: 6px;
 
+        background: #151515;
+        border: 1px solid transparent;
+
         transition: 0.3s ease;
     }
 
     /* =========================
-   🎯 HOVER
+   🎯 HOVER (EFEITO PREMIUM)
 ========================= */
     .footer-links img:hover {
-        transform: translateY(-4px) scale(1.1);
-        filter: brightness(1.2);
+        transform: translateY(-5px) scale(1.12);
+
+        border: 1px solid #ffd000;
+
+        box-shadow:
+            0 0 12px rgba(255, 208, 0, 0.4),
+            0 0 20px rgba(0, 255, 136, 0.2);
+    }
+
+    /* =========================
+   📱 RESPONSIVO
+========================= */
+    @media (max-width: 600px) {
+        .footer-text {
+            font-size: 0.85rem;
+            padding: 0 10px;
+        }
+
+        .footer-links img {
+            width: 36px;
+            height: 36px;
+        }
     }
 </style>

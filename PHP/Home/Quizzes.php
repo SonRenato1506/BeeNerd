@@ -141,7 +141,11 @@ if ($tipo === 'personalidade') {
                     ?>
                     <a href="../Content/<?= $paginaQuiz ?>?id=<?= $quiz['id'] ?>">
                         <div id="caixa">
-                            <img src="../<?= htmlspecialchars($quiz['imagem'] ?: 'quizdefault.jpg') ?>">">
+                            <img src="<?= htmlspecialchars(
+                                filter_var($quiz['imagem'] ?: 'quizdefault.jpg', FILTER_VALIDATE_URL)
+                                ? $quiz['imagem']
+                                : '../../Imagens/' . ($quiz['imagem'] ?: 'quizdefault.jpg')
+                            ) ?>" alt="">
                             <p><b><?= htmlspecialchars($quiz['titulo']) ?></b></p>
                             <!-- <small><?= htmlspecialchars(substr($quiz['descricao'], 0, 80)) ?>...</small> -->
                         </div>
@@ -178,7 +182,11 @@ if ($tipo === 'personalidade') {
                             <?php while ($quiz = $result->fetch_assoc()): ?>
                                 <a href="../Content/<?= $paginaQuiz ?>?id=<?= $quiz['id'] ?>">
                                     <div id="caixa">
-                                        <img src="../<?= htmlspecialchars($quiz['imagem'] ?: 'quizdefault.jpg') ?>">
+                                        <img src="<?= htmlspecialchars(
+                                            filter_var($quiz['imagem'] ?: 'quizdefault.jpg', FILTER_VALIDATE_URL)
+                                            ? $quiz['imagem']
+                                            : '../../Imagens/' . ($quiz['imagem'] ?: 'quizdefault.jpg')
+                                        ) ?>" alt="">
                                         <p><b><?= htmlspecialchars($quiz['titulo']) ?></b></p>
                                         <!-- <small><?= htmlspecialchars(substr($quiz['descricao'], 0, 80)) ?>...</small> -->
                                     </div>

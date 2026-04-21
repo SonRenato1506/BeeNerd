@@ -58,7 +58,11 @@ $categorias = [
                     ?>
                     <a href="../Content/copinha.php?id=<?= $row['id'] ?>">
                         <div id="caixa">
-                            <img src="../<?= htmlspecialchars($row['imagem']) ?>" alt="">
+                            <img src="<?= htmlspecialchars(
+                                filter_var($row['imagem'], FILTER_VALIDATE_URL)
+                                ? $row['imagem']
+                                : '../../Imagens/' . $row['imagem']
+                            ) ?>" alt="">
                             <p><?= htmlspecialchars($row['titulo']) ?></p>
                         </div>
                     </a>
@@ -99,7 +103,11 @@ $categorias = [
                         <?php while ($row = $result->fetch_assoc()): ?>
                             <a href="../Content/copinha.php?id=<?= $row['id'] ?>">
                                 <div id="caixa">
-                                    <img src="../<?= htmlspecialchars($row['imagem']) ?>" alt="">
+                                    <img src="<?= htmlspecialchars(
+                                        filter_var($row['imagem'], FILTER_VALIDATE_URL)
+                                        ? $row['imagem']
+                                        : '../../Imagens/' . $row['imagem']
+                                    ) ?>" alt="">
                                     <p><?= htmlspecialchars($row['titulo']) ?></p>
                                 </div>
                             </a>

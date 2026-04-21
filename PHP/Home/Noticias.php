@@ -14,11 +14,11 @@ $categorias = [
     'Livros' => 'Livros',
     'Tecnologia' => 'Tecnologia',
     'RPG' => 'RPG'
-    ];
-    
-    /* ===============================
-    DESTAQUES
-    ================================ */
+];
+
+/* ===============================
+DESTAQUES
+================================ */
 $destaques = ['astrobot', 'round6', 'batman'];
 
 $sqlDestaque = "
@@ -29,17 +29,17 @@ $resultDestaque = $conexao->query($sqlDestaque);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
-    
-    <head>
-        <meta charset="UTF-8">
-        <title>DnNerds</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <link rel="stylesheet" href="../../Styles/Noticias.css?v=31">
-    </head>
+
+<head>
+    <meta charset="UTF-8">
+    <title>DnNerds</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../../Styles/Noticias.css?v=33">
+</head>
 
 <body>
-    
+
     <main>
 
         <?php
@@ -49,24 +49,26 @@ $resultDestaque = $conexao->query($sqlDestaque);
         if (!empty($_GET['q'])) {
             $termo = $conexao->real_escape_string(trim($_GET['q']));
             echo "<h2 class='classe'>Resultados da busca por: " . htmlspecialchars($termo) . "</h2>";
-            
+
             $sqlBusca = "
             SELECT * FROM noticias
             WHERE titulo LIKE '%$termo%'
             ORDER BY data_publicacao DESC
             ";
             $resultBusca = $conexao->query($sqlBusca);
-            
+
             if ($resultBusca && $resultBusca->num_rows > 0) {
                 echo '<div class="carousel-container">
                 <button class="carousel-btn left">&#10094;</button>
                 <div class="carousel">';
-                
+
                 while ($row = $resultBusca->fetch_assoc()) {
                     ?>
                     <a href="../Content./noticia.php?palavrachave=<?= urlencode($row['palavrachave']) ?>">
                         <div id="caixa">
-                            <img src="../<?= $row['imagem'] ?>" alt="">
+                            <img src="<?= filter_var($row['imagem'], FILTER_VALIDATE_URL)
+                                ? $row['imagem']
+                                : '../../Imagens/' . $row['imagem'] ?>" alt="">
                             <p><?= htmlspecialchars($row['titulo']) ?></p>
                         </div>
                     </a>
@@ -74,12 +76,12 @@ $resultDestaque = $conexao->query($sqlDestaque);
                 }
 
                 echo '</div><button class="carousel-btn right">&#10095;</button></div>';
-                } else {
-                    echo "<p>Nenhum resultado encontrado.</p>";
+            } else {
+                echo "<p>Nenhum resultado encontrado.</p>";
             }
             exit;
-            }
-            ?>
+        }
+        ?>
 
         <!-- DESTAQUES -->
         <section id="noticia-destaque">
@@ -93,7 +95,9 @@ $resultDestaque = $conexao->query($sqlDestaque);
                             ?>
                             <div class="destaque-item">
                                 <a href="../Content/noticia.php?palavrachave=<?= urlencode($row['palavrachave']) ?>">
-                                    <img src="../<?= $row['imagem'] ?>" alt="">
+                                    <img src="<?= filter_var($row['imagem'], FILTER_VALIDATE_URL)
+                                        ? $row['imagem']
+                                        : '../../Imagens/' . $row['imagem'] ?>" alt="">
                                     <div class="destaque-texto">
                                         <h3><?= htmlspecialchars($row['titulo']) ?></h3>
                                     </div>
@@ -110,47 +114,49 @@ $resultDestaque = $conexao->query($sqlDestaque);
                 <button class="destaque-btn right">&#10095;</button>
             </div>
         </section>
-        
+
         <!-- CATEGORIAS -->
         <section id="noticias">
             <?php foreach ($categorias as $key => $titulo): ?>
-                
+
                 <div class="classe">
                     <h2><?= $titulo ?></h2>
                 </div>
 
                 <?php
                 $sql = ($key === 'Recente')
-                ? "SELECT * FROM noticias ORDER BY data_publicacao DESC LIMIT 25"
-                : "SELECT * FROM noticias WHERE categoria='$key' ORDER BY data_publicacao DESC LIMIT 15";
-                
+                    ? "SELECT * FROM noticias ORDER BY data_publicacao DESC LIMIT 25"
+                    : "SELECT * FROM noticias WHERE categoria='$key' ORDER BY data_publicacao DESC LIMIT 15";
+
                 $result = $conexao->query($sql);
                 ?>
 
-<div class="carousel-container">
-    <button class="carousel-btn left">&#10094;</button>
+                <div class="carousel-container">
+                    <button class="carousel-btn left">&#10094;</button>
 
-    <div class="carousel">
-        <?php if ($result && $result->num_rows > 0): ?>
-            <?php while ($row = $result->fetch_assoc()): ?>
+                    <div class="carousel">
+                        <?php if ($result && $result->num_rows > 0): ?>
+                            <?php while ($row = $result->fetch_assoc()): ?>
                                 <a href="../Content/noticia.php?palavrachave=<?= urlencode($row['palavrachave']) ?>">
                                     <div id="caixa">
-                                        <img src="../<?= $row['imagem'] ?>" alt="">
+                                        <img src="<?= filter_var($row['imagem'], FILTER_VALIDATE_URL)
+                                            ? $row['imagem']
+                                            : '../../Imagens/' . $row['imagem'] ?>" alt="">
                                         <p><?= htmlspecialchars($row['titulo']) ?></p>
                                     </div>
                                 </a>
                             <?php endwhile; ?>
-                            <?php else: ?>
+                        <?php else: ?>
                             <p>Nenhuma notícia encontrada.</p>
-                            <?php endif; ?>
-                        </div>
-                        
-                        <button class="carousel-btn right">&#10095;</button>
+                        <?php endif; ?>
                     </div>
-                    
-                    <?php endforeach; ?>
+
+                    <button class="carousel-btn right">&#10095;</button>
+                </div>
+
+            <?php endforeach; ?>
         </section>
-        
+
     </main>
 
     <script>
@@ -163,13 +169,13 @@ $resultDestaque = $conexao->query($sqlDestaque);
             const destaqueItens = document.querySelectorAll(".destaque-item");
             const destaqueLeft = document.querySelector(".destaque-btn.left");
             const destaqueRight = document.querySelector(".destaque-btn.right");
-            
+
             let destaquePos = 0;
 
             function atualizarDestaque() {
                 destaqueCarousel.style.transform = `translateX(-${destaquePos * 100}%)`;
             }
-            
+
             destaqueRight.onclick = () => {
                 destaquePos = (destaquePos + 1) % destaqueItens.length;
                 atualizarDestaque();
@@ -189,15 +195,15 @@ $resultDestaque = $conexao->query($sqlDestaque);
             CARROSSEIS DE CATEGORIA
             =============================== */
             document.querySelectorAll(".carousel-container").forEach(container => {
-                
+
                 const carousel = container.querySelector(".carousel");
                 const btnLeft = container.querySelector(".carousel-btn.left");
                 const btnRight = container.querySelector(".carousel-btn.right");
-                
+
                 if (!carousel || !btnLeft || !btnRight) return;
 
                 const scrollAmount = 360;
-                
+
                 btnRight.onclick = () => {
                     carousel.scrollBy({ left: scrollAmount, behavior: "smooth" });
                 };
