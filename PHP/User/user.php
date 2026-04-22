@@ -138,7 +138,7 @@ include_once("../Partial/header.php");
         <?php endif; ?>
 
         <div class="foto-perfil">
-            <img src="../<?= !empty($usuario['foto']) ? $usuario['foto'] : 'https://via.placeholder.com/150' ?>">
+            <img src="../../Imagens/<?= !empty($usuario['foto']) ? $usuario['foto'] : 'https://via.placeholder.com/150' ?>">
         </div>
 
         <!-- =========================

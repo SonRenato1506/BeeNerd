@@ -51,7 +51,6 @@ if (isset($_SESSION['id'])) {
 
     /* BODY */
     body {
-        background: var(--bg);
         font-family: 'Segoe UI', Arial, sans-serif;
         color: var(--texto);
     }
@@ -71,6 +70,7 @@ if (isset($_SESSION['id'])) {
         width: 100%;
 
         background: rgba(13, 13, 13, 0.9);
+
         backdrop-filter: blur(10px);
 
         border-bottom: 1px solid rgba(255, 208, 0, 0.2);
@@ -108,14 +108,49 @@ if (isset($_SESSION['id'])) {
         transition: 0.3s;
     }
 
-    .navbar ul a:hover::after,
-    .navbar ul a.ativo::after {
-        width: 100%;
+    /* REMOVE LINHA */
+    .navbar ul a::after {
+        display: none;
     }
 
-    .navbar ul a:hover,
+    /* BASE DO LINK */
+    .navbar ul a {
+        color: var(--texto-sec);
+        padding: 10px 18px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* HEXÁGONO (ATIVO) */
     .navbar ul a.ativo {
-        color: var(--amarelo);
+        color: black;
+        font-weight: bold;
+    }
+
+    /* FUNDO HEXAGONAL */
+    .navbar ul a.ativo::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+
+        background: var(--amarelo);
+
+        z-index: -1;
+
+        /* FORMATO HEXÁGONO */
+        clip-path: polygon(25% 0%,
+                75% 0%,
+                100% 50%,
+                75% 100%,
+                25% 100%,
+                0% 50%);
+
+        transition: 0.3s;
+    }
+
+    /* HOVER COM EFEITO */
+    .navbar ul a:hover::before {
+        background: var(--amarelo-soft);
     }
 
     /* ===================== */
@@ -126,7 +161,7 @@ if (isset($_SESSION['id'])) {
         color: var(--amarelo);
 
         padding: 6px 14px;
-        border-radius: 8px;
+        border-radius: 0px;
         font-size: 13px;
 
         cursor: pointer;
@@ -134,7 +169,7 @@ if (isset($_SESSION['id'])) {
     }
 
     .btn-navbar:hover {
-        background: var(--amarelo);
+        background: #FEE700;
         color: black;
     }
 
@@ -321,6 +356,46 @@ if (isset($_SESSION['id'])) {
         transform: translateY(-3px);
         box-shadow: 0 0 25px rgba(255, 208, 0, 0.6);
     }
+
+    .honey-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.honey-btn {
+    position: relative;
+    overflow: visible; /* importante pra aparecer fora */
+}
+
+/* MEL EMBAIXO */
+.honey-btn::after {
+    content: "";
+    position: absolute;
+    left: -2.5px;
+    top: 100%; /* começa logo abaixo do botão */
+
+    
+    width: 100%;
+    height: 30px;
+
+    background-image: url('../../Imagens/mel_caindo.png');
+    background-repeat: repeat-x;
+    background-size: contain;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ATIVA NO HOVER */
+.honey-btn:hover::after {
+    opacity: 1;
+    transform: translateY(0);
+    animation: melPingando 1s linear infinite;
+}
+
 </style>
 
 <script>
@@ -386,8 +461,8 @@ if (isset($_SESSION['id'])) {
             </div>
         <?php else: ?>
             <div class="auth-buttons">
-                <a href="../User/FazerLogin.php" class="btn-navbar">Login</a>
-                <a href="../User/CriarConta.php" class="btn-navbar">Criar Conta</a>
+                <a href="../User/FazerLogin.php" class="btn-navbar honey-btn">Login</a>
+                <a href="../User/CriarConta.php" class="btn-navbar honey-btn">Criar Conta</a>
             </div>
         <?php endif; ?>
 

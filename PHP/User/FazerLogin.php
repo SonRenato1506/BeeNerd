@@ -50,7 +50,7 @@ include_once("../Partial/header.php");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DnNerds</title>
-    <link rel="stylesheet" href="../../Styles/FazerLogin.css?v=14">
+    <link rel="stylesheet" href="../../Styles/FazerLogin.css?v=16">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
