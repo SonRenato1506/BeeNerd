@@ -377,7 +377,11 @@ if (isset($_SESSION['id'])) {
         <?php if (isset($_SESSION['id'])): ?>
             <div class="user-area">
                 <a href="../User/user.php">
-                    <img src="../<?= !empty($fotoUsuario) ? $fotoUsuario : '../../Imagens/user.png' ?>" class="user-photo">
+                    <img src="<?= htmlspecialchars(
+                        filter_var(!empty($fotoUsuario) ? $fotoUsuario : '', FILTER_VALIDATE_URL)
+                        ? $fotoUsuario
+                        : '../../Imagens/' . (!empty($fotoUsuario) ? $fotoUsuario : 'user.png')
+                    ) ?>" class="user-photo">
                 </a>
             </div>
         <?php else: ?>

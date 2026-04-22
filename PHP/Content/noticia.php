@@ -130,8 +130,12 @@ $comentarios = $stmtComents->get_result();
 <article class="noticia-detalhe">
 
 <img
-src="../<?= htmlspecialchars($noticia['imagem']) ?>"
-alt="<?= htmlspecialchars($noticia['titulo']) ?>"
+    src="<?= htmlspecialchars(
+        filter_var($noticia['imagem'] ?: 'default.jpg', FILTER_VALIDATE_URL)
+            ? $noticia['imagem']
+            : '../../Imagens/' . ($noticia['imagem'] ?: 'default.jpg')
+    ) ?>"
+    alt="<?= htmlspecialchars($noticia['titulo']) ?>"
 >
 
 <h1>
@@ -196,9 +200,11 @@ para comentar.
 
 <div class="comentario-item">
 
-<img
-src="../<?= !empty($coment['foto']) ? $coment['foto'] : '../../Imagens/user.png' ?>"
->
+<img src="<?= htmlspecialchars(
+    filter_var(!empty($coment['foto']) ? $coment['foto'] : '', FILTER_VALIDATE_URL)
+        ? $coment['foto']
+        : '../../Imagens/' . (!empty($coment['foto']) ? $coment['foto'] : 'user.png')
+) ?>" alt="">
 
 <div class="comentario-conteudo">
 
@@ -255,8 +261,12 @@ class="relacionada-item"
 <div class="caixa-relacionada">
 
 <img
-src="../<?= htmlspecialchars($row['imagem']) ?>"
-alt="<?= htmlspecialchars($row['titulo']) ?>"
+    src="<?= htmlspecialchars(
+        filter_var($row['imagem'] ?: 'default.jpg', FILTER_VALIDATE_URL)
+            ? $row['imagem']
+            : '../../Imagens/' . ($row['imagem'] ?: 'default.jpg')
+    ) ?>"
+    alt="<?= htmlspecialchars($row['titulo']) ?>"
 >
 
 <p>

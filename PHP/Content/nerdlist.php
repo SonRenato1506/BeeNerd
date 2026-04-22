@@ -92,7 +92,11 @@ $itens = $conexao->query($sqlItens);
 
                 <div class="item" draggable="true" id="item<?= $item['id'] ?>" ondragstart="drag(event)">
 
-                    <img src="../<?= htmlspecialchars($item['imagem']) ?>" alt="">
+                    <img src="<?= htmlspecialchars(
+                        filter_var($item['imagem'] ?: 'default.jpg', FILTER_VALIDATE_URL)
+                        ? $item['imagem']
+                        : '../../Imagens/' . ($item['imagem'] ?: 'default.jpg')
+                    ) ?>" alt="">
                 </div>
 
             <?php endwhile; ?>

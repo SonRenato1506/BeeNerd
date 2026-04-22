@@ -75,6 +75,7 @@ if ($resultPerguntas && $resultPerguntas->num_rows > 0) {
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title><?= htmlspecialchars($quiz['titulo']) ?></title>
@@ -83,48 +84,52 @@ if ($resultPerguntas && $resultPerguntas->num_rows > 0) {
 
 <body>
 
-<main class="conteudo">
-    <article class="quiz">
-        <img class="quiz_img" src="../<?= htmlspecialchars($quiz['imagem']) ?>">
+    <main class="conteudo">
+        <article class="quiz">
+            <img class="quiz_img" src="<?= htmlspecialchars(
+                filter_var($quiz['imagem'] ?: 'quizdefault.jpg', FILTER_VALIDATE_URL)
+                ? $quiz['imagem']
+                : '../../Imagens/' . ($quiz['imagem'] ?: 'quizdefault.jpg')
+            ) ?>" alt="">
+            
+            <div class="barra">
+                <div id="barra-progresso"></div>
+            </div>
 
-        <div class="barra">
-            <div id="barra-progresso"></div>
-        </div>
+            <p><?= htmlspecialchars($quiz['descricao']) ?></p>
 
-        <p><?= htmlspecialchars($quiz['descricao']) ?></p>
+            <div id="quiz-container"></div>
+        </article>
+    </main>
 
-        <div id="quiz-container"></div>
-    </article>
-</main>
+    <?php if ($podeEditar): ?>
+        <a href="../Edit/editorQuiz.php?id=<?= $quiz['id'] ?>">
+            <button id="editor">Edite esse Quiz</button>
+        </a>
+    <?php endif; ?>
 
-<?php if ($podeEditar): ?>
-<a href="../Edit/editorQuiz.php?id=<?= $quiz['id'] ?>">
-    <button id="editor">Edite esse Quiz</button>
-</a>
-<?php endif; ?>
+    <script>
 
-<script>
+        // ===========================
+        // 🔊 SONS
+        // ===========================
+        const somAcerto = new Audio("../../Audios/acerto.mp3");
+        const somErro = new Audio("../../Audios/erro.mp3");
 
-// ===========================
-// 🔊 SONS
-// ===========================
-const somAcerto = new Audio("../../Audios/acerto.mp3");
-const somErro = new Audio("../../Audios/erro.mp3");
+        // ===========================
+        // 🔔 FILA DE NOTIFICAÇÕES
+        // ===========================
+        let notif;
+        let filaNotificacoes = [];
+        let exibindo = false;
 
-// ===========================
-// 🔔 FILA DE NOTIFICAÇÕES
-// ===========================
-let notif;
-let filaNotificacoes = [];
-let exibindo = false;
+        document.addEventListener("DOMContentLoaded", () => {
 
-document.addEventListener("DOMContentLoaded", () => {
+            notif = document.createElement("div");
+            notif.id = "notificacao";
+            notif.className = "notificacao";
 
-    notif = document.createElement("div");
-    notif.id = "notificacao";
-    notif.className = "notificacao";
-
-    notif.innerHTML = `
+            notif.innerHTML = `
         <div class="notif-icon">⭐</div>
         <div>
             <strong id="notif-titulo"></strong>
@@ -132,158 +137,158 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
     `;
 
-    document.body.appendChild(notif);
-});
-
-function adicionarNotificacao({ titulo, descricao, icone = "⭐", duracao = 2500 }) {
-
-    filaNotificacoes.push({ titulo, descricao, icone, duracao });
-
-    if (!exibindo) {
-        processarFila();
-    }
-}
-
-function processarFila() {
-
-    if (filaNotificacoes.length === 0) {
-        exibindo = false;
-        return;
-    }
-
-    exibindo = true;
-
-    const { titulo, descricao, icone, duracao } = filaNotificacoes.shift();
-
-    notif.querySelector("#notif-titulo").textContent = titulo;
-    notif.querySelector("#notif-desc").textContent = descricao;
-    notif.querySelector(".notif-icon").textContent = icone;
-
-    notif.classList.add("mostrar");
-
-    setTimeout(() => {
-        notif.classList.remove("mostrar");
-
-        setTimeout(() => {
-            processarFila();
-        }, 300);
-
-    }, duracao);
-}
-
-// ===========================
-// ⭐ XP + EVENTOS
-// ===========================
-async function registrarEvento(tipo, referenciaID = null){
-
-    try{
-        const response = await fetch("../Partial/registrar_evento.php",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/x-www-form-urlencoded"
-            },
-            body:`tipo=${tipo}&referencia_id=${referenciaID}`
+            document.body.appendChild(notif);
         });
 
-        const data = await response.json();
+        function adicionarNotificacao({ titulo, descricao, icone = "⭐", duracao = 2500 }) {
 
-        // 🔥 LEVEL UP
-        if(data.subiu_level){
-            adicionarNotificacao({
-                titulo: "LEVEL UP!",
-                descricao: "Nível " + data.level,
-                icone: "🔥",
-                duracao: 3000
-            });
+            filaNotificacoes.push({ titulo, descricao, icone, duracao });
+
+            if (!exibindo) {
+                processarFila();
+            }
         }
 
-        // ⭐ XP
-        if(data.xp_ganho > 0){
-            adicionarNotificacao({
-                titulo: "XP",
-                descricao: "+" + data.xp_ganho + " XP",
-                icone: "⭐"
-            });
-        }
+        function processarFila() {
 
-        // 🏆 CONQUISTA
-        if(data.nova_conquista){
-
-            adicionarNotificacao({
-                titulo: data.nova_conquista.nome,
-                descricao: data.nova_conquista.descricao,
-                icone: "✨"
-            });
-        }
-
-    }catch(e){
-        console.error(e);
-    }
-}
-
-// ===========================
-// 🧠 QUIZ
-// ===========================
-function embaralhar(array) {
-    return array.sort(() => Math.random() - 0.5);
-}
-
-const perguntas = <?= json_encode(array_values($perguntas)) ?>;
-
-let indice = 0;
-let pontuacao = 0;
-
-const container = document.getElementById("quiz-container");
-
-function mostrarPergunta() {
-
-    document.getElementById("barra-progresso").style.width =
-        (indice / perguntas.length) * 100 + "%";
-
-    container.innerHTML = "";
-
-    const pergunta = perguntas[indice];
-    const respostas = embaralhar([...pergunta.respostas]);
-
-    const h2 = document.createElement("h2");
-    h2.textContent = pergunta.texto;
-    container.appendChild(h2);
-
-    respostas.forEach(resposta => {
-
-        const btn = document.createElement("button");
-        btn.textContent = resposta.texto;
-
-        btn.onclick = () => {
-
-            document.querySelectorAll("#quiz-container button")
-                .forEach(b => b.disabled = true);
-
-            if (resposta.correta == 1) {
-                somAcerto.play();
-                btn.classList.add("correta");
-                pontuacao++;
-            } else {
-                somErro.play();
-                btn.classList.add("errada");
+            if (filaNotificacoes.length === 0) {
+                exibindo = false;
+                return;
             }
 
+            exibindo = true;
+
+            const { titulo, descricao, icone, duracao } = filaNotificacoes.shift();
+
+            notif.querySelector("#notif-titulo").textContent = titulo;
+            notif.querySelector("#notif-desc").textContent = descricao;
+            notif.querySelector(".notif-icon").textContent = icone;
+
+            notif.classList.add("mostrar");
+
             setTimeout(() => {
-                indice++;
-                indice < perguntas.length ? mostrarPergunta() : mostrarResultado();
-            }, 700);
-        };
+                notif.classList.remove("mostrar");
 
-        container.appendChild(btn);
-    });
-}
+                setTimeout(() => {
+                    processarFila();
+                }, 300);
 
-// ===========================
-// 🏆 RESULTADO
-// ===========================
-function mostrarResultado() {
+            }, duracao);
+        }
 
-    container.innerHTML = `
+        // ===========================
+        // ⭐ XP + EVENTOS
+        // ===========================
+        async function registrarEvento(tipo, referenciaID = null) {
+
+            try {
+                const response = await fetch("../Partial/registrar_evento.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `tipo=${tipo}&referencia_id=${referenciaID}`
+                });
+
+                const data = await response.json();
+
+                // 🔥 LEVEL UP
+                if (data.subiu_level) {
+                    adicionarNotificacao({
+                        titulo: "LEVEL UP!",
+                        descricao: "Nível " + data.level,
+                        icone: "🔥",
+                        duracao: 3000
+                    });
+                }
+
+                // ⭐ XP
+                if (data.xp_ganho > 0) {
+                    adicionarNotificacao({
+                        titulo: "XP",
+                        descricao: "+" + data.xp_ganho + " XP",
+                        icone: "⭐"
+                    });
+                }
+
+                // 🏆 CONQUISTA
+                if (data.nova_conquista) {
+
+                    adicionarNotificacao({
+                        titulo: data.nova_conquista.nome,
+                        descricao: data.nova_conquista.descricao,
+                        icone: "✨"
+                    });
+                }
+
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // ===========================
+        // 🧠 QUIZ
+        // ===========================
+        function embaralhar(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        const perguntas = <?= json_encode(array_values($perguntas)) ?>;
+
+        let indice = 0;
+        let pontuacao = 0;
+
+        const container = document.getElementById("quiz-container");
+
+        function mostrarPergunta() {
+
+            document.getElementById("barra-progresso").style.width =
+                (indice / perguntas.length) * 100 + "%";
+
+            container.innerHTML = "";
+
+            const pergunta = perguntas[indice];
+            const respostas = embaralhar([...pergunta.respostas]);
+
+            const h2 = document.createElement("h2");
+            h2.textContent = pergunta.texto;
+            container.appendChild(h2);
+
+            respostas.forEach(resposta => {
+
+                const btn = document.createElement("button");
+                btn.textContent = resposta.texto;
+
+                btn.onclick = () => {
+
+                    document.querySelectorAll("#quiz-container button")
+                        .forEach(b => b.disabled = true);
+
+                    if (resposta.correta == 1) {
+                        somAcerto.play();
+                        btn.classList.add("correta");
+                        pontuacao++;
+                    } else {
+                        somErro.play();
+                        btn.classList.add("errada");
+                    }
+
+                    setTimeout(() => {
+                        indice++;
+                        indice < perguntas.length ? mostrarPergunta() : mostrarResultado();
+                    }, 700);
+                };
+
+                container.appendChild(btn);
+            });
+        }
+
+        // ===========================
+        // 🏆 RESULTADO
+        // ===========================
+        function mostrarResultado() {
+
+            container.innerHTML = `
         <div class="vitoria">
             <h2>🏆 ${pontuacao}/${perguntas.length}</h2>
             <div id="ranking"></div>
@@ -294,49 +299,50 @@ function mostrarResultado() {
         </div>
     `;
 
-    salvarResultado();
+            salvarResultado();
 
-    setTimeout(() => {
-        registrarEvento("completar_quiz", <?= $quiz_id ?>);
-    }, 300);
-}
+            setTimeout(() => {
+                registrarEvento("completar_quiz", <?= $quiz_id ?>);
+            }, 300);
+        }
 
-// ===========================
-// 💾 SALVAR
-// ===========================
-function salvarResultado() {
-    fetch("../Partial/salvar_resultado.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            quiz_id: <?= $quiz_id ?>,
-            pontuacao,
-            total: perguntas.length
-        })
-    })
-    .then(res => res.json())
-    .then(data => mostrarRanking(data.ranking));
-}
+        // ===========================
+        // 💾 SALVAR
+        // ===========================
+        function salvarResultado() {
+            fetch("../Partial/salvar_resultado.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    quiz_id: <?= $quiz_id ?>,
+                    pontuacao,
+                    total: perguntas.length
+                })
+            })
+                .then(res => res.json())
+                .then(data => mostrarRanking(data.ranking));
+        }
 
-// ===========================
-// 🏅 RANKING
-// ===========================
-function mostrarRanking(ranking) {
-    if (!ranking.length) return;
+        // ===========================
+        // 🏅 RANKING
+        // ===========================
+        function mostrarRanking(ranking) {
+            if (!ranking.length) return;
 
-    let html = "<h3>🏆 Top 3</h3>";
+            let html = "<h3>🏆 Top 3</h3>";
 
-    ranking.forEach((p, i) => {
-        html += `<p>${i+1}º ${p.nome} — ${p.pontuacao}/${p.total}</p>`;
-    });
+            ranking.forEach((p, i) => {
+                html += `<p>${i + 1}º ${p.nome} — ${p.pontuacao}/${p.total}</p>`;
+            });
 
-    document.getElementById("ranking").innerHTML = html;
-}
+            document.getElementById("ranking").innerHTML = html;
+        }
 
-// START
-perguntas.length > 0 ? mostrarPergunta() : container.innerHTML = "<h2>Sem perguntas</h2>";
+        // START
+        perguntas.length > 0 ? mostrarPergunta() : container.innerHTML = "<h2>Sem perguntas</h2>";
 
-</script>
+    </script>
 
 </body>
+
 </html>

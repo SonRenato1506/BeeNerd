@@ -116,6 +116,14 @@ while ($row = $resItens->fetch_assoc()) {
             return url.split('watch?v=')[1].split('&')[0];
         }
 
+        function getImgSrc(img) {
+            if (!img) return '../../Imagens/default.jpg';
+
+            return /^(https?:)?\/\//.test(img)
+                ? img
+                : `../../Imagens/${img}`;
+        }
+
         function renderMidia(item) {
             if (isYouTube(item.imagem)) {
                 return `
@@ -123,8 +131,11 @@ while ($row = $resItens->fetch_assoc()) {
             <h2>${item.nome}</h2>
         `;
             }
+
+            const src = getImgSrc(item.imagem);
+
             return `
-        <img src="../${item.imagem}?v=2">
+        <img src="${src}?v=2">
         <h2>${item.nome}</h2>
     `;
         }

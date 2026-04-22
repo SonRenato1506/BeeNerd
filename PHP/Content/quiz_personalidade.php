@@ -151,7 +151,11 @@ if ($resultPerguntas && $resultPerguntas->num_rows > 0) {
 
         <article class="quiz">
 
-            <img class="quiz_img" src="../<?= htmlspecialchars($quiz['imagem'] ?: '../../Imagens/quizdefault.jpg') ?>">
+            <img class="quiz_img" src="<?= htmlspecialchars(
+                filter_var($quiz['imagem'] ?: 'quizdefault.jpg', FILTER_VALIDATE_URL)
+                ? $quiz['imagem']
+                : '../../Imagens/' . ($quiz['imagem'] ?: 'quizdefault.jpg')
+            ) ?>" alt="">
 
             <p><?= htmlspecialchars($quiz['descricao']) ?></p>
 
@@ -269,9 +273,12 @@ if ($resultPerguntas && $resultPerguntas->num_rows > 0) {
 <h2>${r.titulo}</h2>
 
 <img
-src="../${r.imagem}"
-class="quiz_img"
-style="max-width:300px;border-radius:20px;"
+    src="${/^(https?:)?\/\//.test(r.imagem || '')
+                    ? r.imagem
+                    : `../../Imagens/${r.imagem || 'quizdefault.jpg'}`
+                }"
+    class="quiz_img"
+    style="max-width:300px;border-radius:20px;"
 >
 
 <p>${r.descricao}</p>
