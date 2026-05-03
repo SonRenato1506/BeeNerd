@@ -3,9 +3,37 @@ include_once("../Partial/config.php");
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-$titulo    = $_POST['titulo'] ?? '';
+function uploadImagem($file)
+{
+    $tiposPermitidos = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+
+    if ($file['error'] === 0 && in_array($file['type'], $tiposPermitidos)) {
+
+        if ($file['size'] <= 2 * 1024 * 1024) {
+
+            $pasta = "../../Imagens/";
+            $nomeArquivo = uniqid() . "_" . basename($file["name"]);
+            $caminho = $pasta . $nomeArquivo;
+
+            if (move_uploaded_file($file["tmp_name"], $caminho)) {
+                return $nomeArquivo;
+            }
+        }
+    }
+
+    return null;
+}
+
+$titulo = $_POST['titulo'] ?? '';
 $descricao = $_POST['descricao'] ?? null;
-$imagem    = $_POST['imagem'] ?? null;
+
+$imagem = null;
+if (isset($_FILES['imagem_upload']) && $_FILES['imagem_upload']['error'] === 0) {
+    $imagem = uploadImagem($_FILES['imagem_upload']);
+} elseif (!empty($_POST['imagem'])) {
+    $imagem = $_POST['imagem'];
+}
+
 $categoria = $_POST['categoria'] ?? '';
 
 if (!$titulo || !$categoria) {
@@ -29,7 +57,8 @@ if (!$nerdlist_id) {
 /* 2️⃣ Tiers */
 if (!empty($_POST['tier_nome'])) {
     foreach ($_POST['tier_nome'] as $i => $nome) {
-        if (!$nome) continue;
+        if (!$nome)
+            continue;
 
         $cor = $_POST['tier_cor'][$i] ?? '#666666';
 
@@ -45,9 +74,32 @@ if (!empty($_POST['tier_nome'])) {
 /* 3️⃣ Itens */
 if (!empty($_POST['item_nome'])) {
     foreach ($_POST['item_nome'] as $i => $nome) {
-        if (!$nome) continue;
+        if (!$nome)
+            continue;
 
-        $img = $_POST['item_imagem'][$i] ?? '';
+        $img = null;
+
+        // 1️⃣ Upload
+        if (
+            isset($_FILES['item_imagem_upload']['name'][$i]) &&
+            $_FILES['item_imagem_upload']['error'][$i] === 0
+        ) {
+
+            $file = [
+                'name' => $_FILES['item_imagem_upload']['name'][$i],
+                'type' => $_FILES['item_imagem_upload']['type'][$i],
+                'tmp_name' => $_FILES['item_imagem_upload']['tmp_name'][$i],
+                'error' => $_FILES['item_imagem_upload']['error'][$i],
+                'size' => $_FILES['item_imagem_upload']['size'][$i],
+            ];
+
+            $img = uploadImagem($file);
+        }
+
+        // 2️⃣ URL (fallback)
+        elseif (!empty($_POST['item_imagem'][$i])) {
+            $img = $_POST['item_imagem'][$i];
+        }
 
         $sqlItem = "INSERT INTO nerdlist_itens (nerdlist_id, nome, imagem)
                     VALUES (?, ?, ?)";

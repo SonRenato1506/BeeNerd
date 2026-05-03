@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '../Partial/config.php';
-include_once("../Partial.php/header.php");
+include_once("../Partial/config.php");
+include_once("../Partial/header.php");
 
 /* ===============================
    VALIDAÇÃO DO QUIZ

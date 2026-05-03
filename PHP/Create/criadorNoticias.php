@@ -10,7 +10,7 @@ include_once("../Partial/header.php");
     <meta charset="UTF-8">
     <title>Criar Notícia - DnNerds</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../Styles/Criador.css?v=4">
+    <link rel="stylesheet" href="../../Styles/Criador.css?v=6">
 
 
 
@@ -22,7 +22,7 @@ include_once("../Partial/header.php");
     <div class="container">
         <h2>📰 Criar Nova Notícia</h2>
 
-        <form action="../Save/salvarNoticia.php" method="POST">
+        <form action="../Save/salvarNoticia.php" method="POST" enctype="multipart/form-data">
 
             <label>Título</label>
             <input type="text" name="titulo" required>
@@ -30,8 +30,11 @@ include_once("../Partial/header.php");
             <label>Texto da notícia</label>
             <textarea name="texto" rows="8" required></textarea>
 
-            <label>Imagem (URL)</label>
-            <input type="text" name="imagem" placeholder="https://site.com/imagem.jpg ou ../../Imagens/Thunderbolts.jpeg">
+            <label>Imagem (Upload)</label>
+            <input type="file" name="imagem_upload" accept="image/*">
+
+            <label>OU URL da imagem</label>
+            <input type="text" name="imagem_url" placeholder="https://site.com/imagem.jpg">
 
             <label>Categoria</label>
             <select name="categoria" required>

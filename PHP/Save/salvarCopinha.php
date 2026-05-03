@@ -45,6 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmtItem->execute();
     }
 
-    header("Location: ../Homem/copinhas.php");
+    header("Location: ../Home/copinhas.php");
     exit;
 }

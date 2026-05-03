@@ -11,7 +11,7 @@ include_once("../Partial/header.php");
     <title>Criar NerdList - DnNerds</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="../../Styles/Criador.css?v=2">
+    <link rel="stylesheet" href="../../Styles/Criador.css?v=6">
 </head>
 
 <body>
@@ -27,7 +27,10 @@ include_once("../Partial/header.php");
             <label>Descrição</label>
             <textarea name="descricao"></textarea>
 
-            <label>Imagem (URL)</label>
+            <label>Imagem (Upload)</label>
+            <input type="file" name="imagem_upload" accept="image/*">
+
+            <label>OU URL da imagem</label>
             <input type="text" name="imagem">
 
             <label>Categoria</label>
@@ -79,8 +82,11 @@ include_once("../Partial/header.php");
                 <div class="item">
                     <label>Nome</label>
                     <input type="text" name="item_nome[]" required>
-                    <label>Imagem (URL)</label>
-                    <input type="text" name="item_imagem[]" required>
+                    <label>Imagem (Upload)</label>
+                    <input type="file" name="item_imagem_upload[]" accept="image/*">
+
+                    <label>OU URL da imagem</label>
+                    <input type="text" name="item_imagem[]">
                 </div>
             </div>
 
@@ -121,17 +127,21 @@ include_once("../Partial/header.php");
             const div = document.createElement("div");
             div.className = "item";
             div.innerHTML = `
-        <label>Nome</label>
-        <input type="text" name="item_nome[]" required>
+            <label>Nome</label>
+            <input type="text" name="item_nome[]" required>
 
-        <label>Imagem (URL)</label>
-        <input type="text" name="item_imagem[]" required>
-    `;
+            <label>Imagem (Upload)</label>
+            <input type="file" name="item_imagem_upload[]" accept="image/*">
+
+            <label>OU URL da imagem</label>
+            <input type="text" name="item_imagem[]">
+            `;
+            
             document.getElementById("itens").appendChild(div);
         }
     </script>
 
-    
+
     <script>
         function previewTierColor(select) {
             select.style.backgroundColor = select.value;
