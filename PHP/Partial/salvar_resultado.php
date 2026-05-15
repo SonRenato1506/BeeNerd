@@ -20,7 +20,25 @@ $usuario_id = (int) $_SESSION['id'];
 $pontuacao = (int) $data['pontuacao'];
 $total = (int) $data['total'];
 
-/* ✅ SALVA SOMENTE PRIMEIRA TENTATIVA */
+/* -------------------------
+0. PEGA CATEGORIA DO QUIZ
+------------------------- */
+
+$categoria = null;
+
+$stmtCat = $conexao->prepare("SELECT categoria FROM quiz WHERE id = ?");
+$stmtCat->bind_param("i", $quiz_id);
+$stmtCat->execute();
+$resCat = $stmtCat->get_result();
+
+if ($row = $resCat->fetch_assoc()) {
+    $categoria = $row['categoria'];
+}
+
+/* -------------------------
+1. SALVA RESULTADO
+------------------------- */
+
 $sql = "
     INSERT IGNORE INTO quiz_resultados
     (quiz_id, usuario_id, pontuacao, total_perguntas)
@@ -31,7 +49,10 @@ $stmt = $conexao->prepare($sql);
 $stmt->bind_param("iiii", $quiz_id, $usuario_id, $pontuacao, $total);
 $stmt->execute();
 
-/* ✅ TOP 3 GLOBAL */
+/* -------------------------
+2. RANKING TOP 3
+------------------------- */
+
 $sqlRanking = "
     SELECT u.nome, r.pontuacao, r.total_perguntas
     FROM quiz_resultados r
@@ -57,4 +78,11 @@ while ($row = $result->fetch_assoc()) {
     ];
 }
 
-echo json_encode(['ranking' => $ranking]);
+/* -------------------------
+RESPOSTA FINAL
+------------------------- */
+
+echo json_encode([
+    'categoria' => $categoria,
+    'ranking' => $ranking
+]);

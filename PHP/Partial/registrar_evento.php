@@ -2,7 +2,6 @@
 session_start();
 include_once("config.php");
 
-// força resposta JSON sempre
 header('Content-Type: application/json');
 
 // valida login
@@ -15,10 +14,26 @@ $usuario_id = $_SESSION['id'];
 $tipo = $_POST['tipo'] ?? null;
 $referencia_id = $_POST['referencia_id'] ?? null;
 
-// valida dados obrigatórios
 if (!$tipo) {
     echo json_encode(["erro" => "Tipo de evento não informado"]);
     exit;
+}
+
+/* -------------------------
+0. PEGA CATEGORIA (SE FOR NOTÍCIA)
+------------------------- */
+
+$categoria = null;
+
+if ($tipo === "ler_noticia" && $referencia_id) {
+    $stmt = $conexao->prepare("SELECT categoria FROM noticias WHERE id = ?");
+    $stmt->bind_param("i", $referencia_id);
+    $stmt->execute();
+    $res = $stmt->get_result();
+
+    if ($row = $res->fetch_assoc()) {
+        $categoria = $row['categoria'];
+    }
 }
 
 /* -------------------------
@@ -37,7 +52,6 @@ $stmt->execute();
 2. GANHA XP
 ------------------------- */
 
-// busca XP do evento
 $stmt = $conexao->prepare("SELECT xp FROM eventos_xp WHERE tipo = ?");
 $stmt->bind_param("s", $tipo);
 $stmt->execute();
@@ -49,7 +63,6 @@ if ($row = $result->fetch_assoc()) {
     $xp_ganho = (int)$row['xp'];
 }
 
-// busca dados do usuário
 $stmt = $conexao->prepare("SELECT xp, level FROM usuarios WHERE id = ?");
 $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
@@ -60,19 +73,16 @@ $level = $user['level'];
 
 $subiu_level = false;
 
-// fórmula de level
 function xpNecessario($level){
     return 100 * ($level * $level);
 }
 
-// loop de level up
 while ($xp_total >= xpNecessario($level)) {
     $xp_total -= xpNecessario($level);
     $level++;
     $subiu_level = true;
 }
 
-// atualiza usuário
 $stmt = $conexao->prepare("
     UPDATE usuarios SET xp = ?, level = ? WHERE id = ?
 ");
@@ -80,13 +90,16 @@ $stmt->bind_param("iii", $xp_total, $level, $usuario_id);
 $stmt->execute();
 
 /* -------------------------
-3. CONQUISTAS
+3. CONQUISTAS (AGORA COM CATEGORIA)
 ------------------------- */
 
 $stmt = $conexao->prepare("
-    SELECT * FROM conquistas WHERE tipo_evento = ?
+    SELECT * FROM conquistas 
+    WHERE tipo_evento = ?
+    AND (categoria IS NULL OR categoria = ?)
 ");
-$stmt->bind_param("s", $tipo);
+
+$stmt->bind_param("ss", $tipo, $categoria);
 $stmt->execute();
 $conquistas = $stmt->get_result();
 
@@ -94,19 +107,35 @@ $nova_conquista = null;
 
 while ($c = $conquistas->fetch_assoc()) {
 
-    // conta eventos
-    $stmt2 = $conexao->prepare("
-        SELECT COUNT(*) as total
-        FROM eventos_usuario
-        WHERE usuario_id = ? AND tipo = ?
-    ");
-    $stmt2->bind_param("is", $usuario_id, $tipo);
+    if ($c['categoria'] == NULL) {
+
+        // geral (todas categorias)
+        $stmt2 = $conexao->prepare("
+            SELECT COUNT(*) as total
+            FROM eventos_usuario
+            WHERE usuario_id = ? AND tipo = ?
+        ");
+        $stmt2->bind_param("is", $usuario_id, $tipo);
+
+    } else {
+
+        // por categoria
+        $stmt2 = $conexao->prepare("
+            SELECT COUNT(*) as total
+            FROM eventos_usuario eu
+            JOIN noticias n ON eu.referencia_id = n.id
+            WHERE eu.usuario_id = ?
+            AND eu.tipo = ?
+            AND n.categoria = ?
+        ");
+        $stmt2->bind_param("iss", $usuario_id, $tipo, $c['categoria']);
+    }
+
     $stmt2->execute();
     $total = $stmt2->get_result()->fetch_assoc()['total'];
 
     if ($total >= $c['meta']) {
 
-        // verifica se já tem
         $stmt3 = $conexao->prepare("
             SELECT id FROM usuarios_conquistas
             WHERE usuario_id = ? AND conquista_id = ?
@@ -116,7 +145,6 @@ while ($c = $conquistas->fetch_assoc()) {
 
         if ($stmt3->get_result()->num_rows == 0) {
 
-            // insere conquista
             $stmt4 = $conexao->prepare("
                 INSERT INTO usuarios_conquistas (usuario_id, conquista_id)
                 VALUES (?, ?)
@@ -144,6 +172,7 @@ echo json_encode([
     "xp_ganho" => $xp_ganho,
     "level" => $level,
     "subiu_level" => $subiu_level,
+    "categoria" => $categoria,
     "nova_conquista" => $nova_conquista
 ]);
 
